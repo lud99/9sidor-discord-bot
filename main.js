@@ -6,7 +6,7 @@ const sanitizeHtml = require('sanitize-html');
 dotenv.config({ path: "./config.env" });
 
 const app = express();
-app.use(express.json());
+app.use(express.json()); 
 
 app.post("/api/v1/post-article", (req, res) => {
     const article = req.body;
