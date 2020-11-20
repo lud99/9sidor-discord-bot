@@ -21,6 +21,9 @@ app.post("/api/v1/post-article", (req, res) => {
         console.log("Discord bot started");
 
         const newsChannel = client.channels.cache.get(process.env.CHANNEL_ID);
+
+        //makeMessage(article);
+
         
         newsChannel.send(makeMessage(article));
 
@@ -33,16 +36,36 @@ app.post("/api/v1/post-article", (req, res) => {
 app.listen(process.env.PORT || 7500, () => console.log("Server running"));
 
 const makeMessage = (article) => {
-    var description = article.previewText;
+    ;var text = article.mainText;
 
     // Replace br with newlines
-    description = replace(description, "<br />", "\n");
-    description = replace(description, "<br/>", "\n");
-    description = replace(description, "<br>", "\n");
-    description = replace(description, "</br>", "\n");
+    text = replace(text, "<br />", "\n");
+    text = replace(text, "<br/>", "\n");
+    text = replace(text, "<br>", "\n");
+    text = replace(text, "</br>", "\n");
+
+    // Div to newline
+    text = replace(text, "</div>", "\n");
+    text = replace(text, "<div>", "");
 
     // Sanitize
-    description = sanitizeHtml(description, strictSanitizeOptions);
+    text = sanitizeHtml(text, strictSanitizeOptions);
+
+    var shortText = article.previewText;
+
+    // Replace br with newlines
+    shortText = replace(shortText, "<br />", "\n");
+    shortText = replace(shortText, "<br/>", "\n");
+    shortText = replace(shortText, "<br>", "\n");
+    shortText = replace(shortText, "</br>", "\n");
+
+    // Div to newline
+    shortText = replace(shortText, "</div>", "\n");
+    shortText = replace(shortText, "<div>", "");
+
+    // Sanitize
+    shortText = sanitizeHtml(shortText, strictSanitizeOptions);
+    shortText += `\n[Läs mer](https://9sidor.ml${article.url})`
 
     const url = "https://9sidor.ml" + article.url;
 
@@ -51,15 +74,17 @@ const makeMessage = (article) => {
         .setAuthor("9sidor", "https://www.9sidor.ml/apple-touch-icon.png")
         .setURL(url)
         .setTitle(article.title)
-        .setDescription(description)
+
+    embed.addField("Kort text", shortText, false);
+    if (text.length < 1024) embed.addField("Längre text", text, false);
 
     if (article.image && article.image.url)
         embed.setImage(article.image.url);
 
-    embed.addField("Ämne", article.subject.name);
+    embed.addField("Ämne", article.subject.name, false);
             
     if (article.image && article.image.text)
-        embed.addField("Bildtext", article.image.text);
+        embed.addField("Bildtext", article.image.text, false);
 
     embed.setFooter(article.displayDate);
 
