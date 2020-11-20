@@ -33,7 +33,7 @@ app.post("/api/v1/post-article", (req, res) => {
 app.listen(process.env.PORT || 7500, () => console.log("Server running"));
 
 const makeMessage = (article) => {
-    var description = `${article.previewText} \n[Läs mer](${article.url})`;
+    var description = article.previewText;
 
     // Replace br with newlines
     description = replace(description, "<br />", "\n");
