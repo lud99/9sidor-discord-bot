@@ -38,6 +38,8 @@ const makeMessage = (article) => {
     // Replace br with newlines
     description = replace(description, "<br />", "\n");
     description = replace(description, "<br/>", "\n");
+    description = replace(description, "<br>", "\n");
+    description = replace(description, "</br>", "\n");
 
     // Sanitize
     description = sanitizeHtml(description, strictSanitizeOptions);
