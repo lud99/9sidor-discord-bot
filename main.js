@@ -57,7 +57,7 @@ const makeMessage = (article) => {
     embed.addField("Ämne", article.subject.name);
             
     if (article.image && article.image.text)
-        embed.addField("Bildtext", article.imageText);
+        embed.addField("Bildtext", article.image.text);
 
     embed.setFooter(article.displayDate);
 
