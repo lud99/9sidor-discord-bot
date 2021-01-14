@@ -63,11 +63,11 @@ const makeMessage = (article) => {
     shortText = replace(shortText, "</div>", "\n");
     shortText = replace(shortText, "<div>", "");
 
+    const url = "https://9sidor.ml/sv" + article.url;
+
     // Sanitize
     shortText = sanitizeHtml(shortText, strictSanitizeOptions);
-    shortText += `\n[Läs mer](https://9sidor.ml${article.url})`
-
-    const url = "https://9sidor.ml" + article.url;
+    shortText += `\n[Läs mer](url)`
 
     const embed = new Discord.MessageEmbed()
         .setColor("#fdc700")
